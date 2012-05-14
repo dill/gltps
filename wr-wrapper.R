@@ -1,7 +1,7 @@
 # wrapper for Wang and Ranalli-style thin plate splines
 # using the distances from wood.c
 
-wr<-function(samp,knots,bnd,lambda=NULL){
+wr<-function(samp,knots,bnd,lambda=NULL,family="normal"){
 
    # expect samp to be a list with elements x,y,z 
    # where z is response
@@ -22,7 +22,8 @@ wr<-function(samp,knots,bnd,lambda=NULL){
    # find the beta
    beta<-fit.tps(samp$z,matrix(c(samp$x,samp$y),nsamp,2),
                   matrix(c(knots$x,knots$y),length(knots$x),2),
-                  lambda=lambda,D.xkxk=D.xkxk,D.xxk=D.xxk)
+                  lambda=lambda,D.xkxk=D.xkxk,D.xxk=D.xxk,
+                  family=family)
 
    # give it some class
    class(beta)<-"wrtps"
