@@ -99,36 +99,35 @@ fit.tps <- function(y,x,xk=x,lambda=NULL,D.xxk=NULL,D.xkxk=NULL,
 
       lambda<-exp(lambda)
 
+      n<-nrow(tp$X)
       X <- rbind(tp$X,rS*sqrt(lambda)) 
-      z <- c(y,rep(0,ncol(rS)))
-      eta <- log(z)
+      #z <- c(y,rep(0,ncol(rS)))
+      eta <- log(y)
 
       norm <- 0; old.norm <-1
 
       q<-ncol(X)
 
       while(abs(norm-old.norm)>1e-4*norm){
-
         mu<-exp(eta)
-        zz<-(z-mu)/mu + eta
-        zz[(n+1):(n+q)]<-0
+        z<-(y-mu)/mu + eta
+        z[(n+1):(n+q)]<-0
         
-        mod<-lm(zz~X-1)
+        mod<-lm(z~X-1)
 
         b<-mod$coefficients
         eta<-(X%*%b)[1:n]
         trA<-sum(influence(mod)$hat[1:n])
         old.norm<-norm
-        norm<-sum((zz-fitted(mod)[1:n])^2)
+        norm<-sum(((z[!is.na(z)]-fitted(mod))[1:n])^2)
       }
 
-      n<-length(y)
       
-  cat("lambda=",lambda," GCV score=",n*rss/(n-trA)^2,"\n")
+  cat("lambda=",lambda," GCV score=",n*norm/(n-trA)^2,"\n")
       if(ret.mod){
-        return(list(mod=mod,trA=trA,gcv=n*rss/(n-trA)^2))
+        return(list(mod=mod,trA=trA,gcv=n*norm/(n-trA)^2))
       }else{
-        return(n*rss/(n-trA)^2)
+        return(n*norm/(n-trA)^2)
       }
     }
   }else{
@@ -160,7 +159,7 @@ fit.tps <- function(y,x,xk=x,lambda=NULL,D.xxk=NULL,D.xkxk=NULL,
   
   # return the fit with the max
 
-  fit<-gcv.objfcn(lambda,tp,y,rS,n,ret.mod=TRUE)
+  fit<-gcv.objfcn(opt$minimum,tp,y,rS,n,ret.mod=TRUE)
 
   mod<-fit$mod
   trA<-fit$trA
