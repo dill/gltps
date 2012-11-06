@@ -1,6 +1,6 @@
 This is some code to run GLTPS models a la Wang and Ranalli (2007)
 
-You probably want to install the msg package (from github.com/dill/msg), soap (from www.maths.bath.ac.uk/~sw283/simon/software.html) and mgcv (from CRAN) to get it to work.
+You need to install the msg package (from github.com/dill/msg) and mgcv (from CRAN) to get it to work.
 
 YMMV.
 
