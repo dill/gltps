@@ -7,10 +7,10 @@ wr<-function(samp,knots,bnd,lambda=NULL,family="normal"){
    # where z is response
 
    # need to find the distance matrix
-   D<-create_distance_matrix(c(samp$x,knots$x),
-                             c(samp$y,knots$y),
-                             bnd,
-                             faster=1)
+   D <- msg:::create_distance_matrix(c(samp$x,knots$x),
+                                     c(samp$y,knots$y),
+                                     bnd,
+                                     faster=1)
 
    nsamp<-length(samp$x)
 
